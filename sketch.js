@@ -1,11 +1,13 @@
 let swarm = [];
 let num;
+let tileCount;
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   colorMode(HSB, 360, 100, 100, 100);
   num = height*.5;
-  // frameRate(15);
+  // frameRate(10);
+  tileCount = height*0.07;
   background(0, 100, 20);
   for (let i = 0; i < num; i++) {
     swarm.push(new Pixel());
@@ -13,30 +15,57 @@ function setup() {
 }
 
 function draw() {
-  background(0, 100, 30);
+  // background(0, 100, 30);
   fill(100, 100, 100);
+  push();
+  translate(-width/2, -height/2);
+  grid();
+  pop();
   rotateX(frameCount * 0.01);
   rotateY(frameCount * 0.01);
   rotateZ(frameCount * 0.01);
   // let big = map(mouseX, 0, width, 1, 0.1);
   // scale(big);
-  scale(0.3);
+  // scale(0.7);
+  scale(random(0.7));
+  if (frameCount%5==0){
   for(let i=0; i < swarm.length; i++){
     swarm[i].run();
   }
- 
+}
+}
+
+function grid(){
+  for (let gridY = 0; gridY <tileCount; gridY++) {
+    for (let gridX = 0; gridX < tileCount; gridX++) {
+      let posX = (width / tileCount) * gridX;
+      let posY = (height / tileCount) * gridY;
+      noStroke();
+      // fill(random(360), 100, random(100));
+      ellipse(posX, posY, width/tileCount, height/tileCount);
+   
+      let toggle = floor(random(1, 150));
+      if (toggle == 1){
+        fill(0, 100, 100, random(100));
+      } else {
+        fill(0);
+      }
+    }
+  }
 }
 
 class Pixel{
   constructor(){
-    this.loc = createVector(0, 0, 0);
+    // this.loc = createVector(0, 0, 0);
+    this.angle = createVector();
     this.vel = createVector(0, 0, 0);
+    this.amp = createVector(random(20, width/2), random(20, height/2), random(20, height/2));
     this.rad = random(height*0.1);
     this.ts = random(5);
-    this.color = random(150,200);
+    this.color = 180;
     this.sat = random(100);
     this.lum = random(100);
-    this.alpha = random(100);
+    this.alpha = 100;
   }
 
   run(){
@@ -45,19 +74,26 @@ class Pixel{
   }
   
   update(){
-    this.a = p5.Vector.random3D();
-    this.a.mult(random(3));
-    this.vel.add(this.a);
-    this.vel.limit(this.ts);
-    this.loc.add(this.vel);
+    // this.a = p5.Vector.random3D();
+    // this.a.mult(random(3));
+    // this.vel.add(this.a);
+    // this.vel.limit(this.ts);
+    // this.loc.add(this.vel);
+    this.accel = createVector(random(-0.01, 0.01), random(-0.01, 0.01), random(-0.01, 0.01));
+    this.vel.add(this.accel);
+    this.angle.add(this.vel);
   }
   
   display(){
+    let x = sin(this.angle.x) * this.amp.x;
+    let y = sin(this.angle.y) * this.amp.y;
+    let z = sin(this.angle.z) * this.amp.z;
     push();
-    fill(this.color, 100, 100, this.alpha);
+    fill(this.color, random(100), random(100), random(100));
     noStroke();
-    // stroke(50);
-    translate(this.loc);
+    // strokeWeight(10);
+    // translate(this.loc);
+    translate(x, y, z);
     box(this.rad);
     pop();
   }

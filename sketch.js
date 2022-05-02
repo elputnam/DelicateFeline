@@ -28,7 +28,7 @@ function draw() {
   // scale(big);
   // scale(0.7);
   scale(random(0.7));
-  if (frameCount%5==0){
+  if (frameCount%20==0){
   for(let i=0; i < swarm.length; i++){
     swarm[i].run();
   }
@@ -89,7 +89,7 @@ class Pixel{
     let y = sin(this.angle.y) * this.amp.y;
     let z = sin(this.angle.z) * this.amp.z;
     push();
-    fill(this.color, random(100), random(100), random(100));
+    fill(this.color, random(100), random(100));
     noStroke();
     // strokeWeight(10);
     // translate(this.loc);

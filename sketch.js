@@ -6,7 +6,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   colorMode(HSB, 360, 100, 100, 100);
   num = height*.5;
-  // frameRate(10);
+  frameRate(10);
   tileCount = height*0.07;
   background(0, 100, 20);
   for (let i = 0; i < num; i++) {
@@ -15,24 +15,25 @@ function setup() {
 }
 
 function draw() {
-  // background(0, 100, 30);
-  fill(100, 100, 100);
+  //background(0);
+
+  //grid
   push();
-  translate(-width/2, -height/2);
+  translate(random(-width), random(-height));
   grid();
   pop();
-  rotateX(frameCount * 0.01);
-  rotateY(frameCount * 0.01);
-  rotateZ(frameCount * 0.01);
+  rotateX(frameCount * 0.001);
+  rotateY(frameCount * 0.001);
+  rotateZ(frameCount * 0.001);
   // let big = map(mouseX, 0, width, 1, 0.1);
   // scale(big);
-  // scale(0.7);
-  scale(random(0.7));
-  if (frameCount%20==0){
+   scale(0.7);
+  //scale(random(0.7));
+  //if (frameCount%20==0){
   for(let i=0; i < swarm.length; i++){
     swarm[i].run();
   }
-}
+  //}
 }
 
 function grid(){
@@ -41,12 +42,11 @@ function grid(){
       let posX = (width / tileCount) * gridX;
       let posY = (height / tileCount) * gridY;
       noStroke();
-      // fill(random(360), 100, random(100));
-      ellipse(posX, posY, width/tileCount, height/tileCount);
-   
-      let toggle = floor(random(1, 150));
+      rect(posX, posY, width/tileCount, height/tileCount);
+      let toggle = floor(random(1, 5));
       if (toggle == 1){
-        fill(0, 100, 100, random(100));
+        stroke(0);
+        fill(0, 100, random(100), random(100));
       } else {
         fill(0);
       }
@@ -62,7 +62,7 @@ class Pixel{
     this.amp = createVector(random(20, width/2), random(20, height/2), random(20, height/2));
     this.rad = random(height*0.1);
     this.ts = random(5);
-    this.color = 180;
+    this.color = random(150,200);
     this.sat = random(100);
     this.lum = random(100);
     this.alpha = 100;
@@ -89,12 +89,16 @@ class Pixel{
     let y = sin(this.angle.y) * this.amp.y;
     let z = sin(this.angle.z) * this.amp.z;
     push();
-    fill(this.color, random(100), random(100));
-    noStroke();
-    // strokeWeight(10);
+    fill(this.color, this.sat, this.lum);
+    // noStroke();
+    strokeWeight(5);
     // translate(this.loc);
     translate(x, y, z);
     box(this.rad);
     pop();
   }
+}
+
+function windowResized(){
+  resizeCanvas(windowWidth, windowHeight);
 }

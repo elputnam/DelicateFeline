@@ -6,7 +6,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   colorMode(HSB, 360, 100, 100, 100);
   num = height*.5;
-  frameRate(10);
+  frameRate(12);
   tileCount = height*0.07;
   background(0, 100, 20);
   for (let i = 0; i < num; i++) {
@@ -20,6 +20,7 @@ function draw() {
   //grid
   push();
   translate(random(-width), random(-height));
+  fill(0);
   grid();
   pop();
   rotateX(frameCount * 0.001);
@@ -45,8 +46,8 @@ function grid(){
       rect(posX, posY, width/tileCount, height/tileCount);
       let toggle = floor(random(1, 5));
       if (toggle == 1){
-        stroke(0);
-        fill(0, 100, random(100), random(100));
+        //stroke(0);
+        fill(100, 100, random(100), random(100));
       } else {
         fill(0);
       }
@@ -62,7 +63,7 @@ class Pixel{
     this.amp = createVector(random(20, width/2), random(20, height/2), random(20, height/2));
     this.rad = random(height*0.1);
     this.ts = random(5);
-    this.color = random(150,200);
+    this.color = random(200,300);
     this.sat = random(100);
     this.lum = random(100);
     this.alpha = 100;
@@ -79,7 +80,7 @@ class Pixel{
     // this.vel.add(this.a);
     // this.vel.limit(this.ts);
     // this.loc.add(this.vel);
-    this.accel = createVector(random(-0.01, 0.01), random(-0.01, 0.01), random(-0.01, 0.01));
+    this.accel = createVector(random(-0.001, 0.001), random(-0.001, 0.001), random(-0.001, 0.001));
     this.vel.add(this.accel);
     this.angle.add(this.vel);
   }
@@ -89,9 +90,9 @@ class Pixel{
     let y = sin(this.angle.y) * this.amp.y;
     let z = sin(this.angle.z) * this.amp.z;
     push();
-    fill(this.color, this.sat, this.lum);
+    fill(this.color, this.sat, this.lum, random(10,50));
     // noStroke();
-    strokeWeight(5);
+    strokeWeight(3);
     // translate(this.loc);
     translate(x, y, z);
     box(this.rad);
